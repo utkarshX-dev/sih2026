@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VECTOR 155mm Shell — Live Telemetry Ground Control Station</title>
+  <meta name="description" content="Real-time web ground station for VECTOR 155mm Precision Guided Artillery Shell featuring dual-stage ML outlier detection and live trajectory visualization.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Top Navigation Header -->
+  <header class="header">
+    <div class="header-brand">
+      <div class="brand-logo">
+        <span class="logo-reticle">⌖</span>
+      </div>
+      <div class="brand-text">
+        <div class="brand-sys-tag">TAC-GCS // MIL-STD-1553B</div>
+        <h1 class="brand-title">VECTOR 155mm GUIDANCE E-STACK</h1>
+        <span class="brand-subtitle">SIH 2026 PS-98 &bull; Team Tenacity (R15-230) &bull; Precision Guidance & Smart Fuze</span>
+      </div>
+    </div>
+
+    <div class="header-status-bar">
+      <div class="status-pill" id="conn-pill">
+        <span class="status-dot pulse" id="conn-dot"></span>
+        <span class="status-label" id="conn-label">INITIALIZING</span>
+      </div>
+      <div class="status-pill" id="source-pill">
+        <span class="pill-title">DATA LINK:</span>
+        <span class="pill-val" id="source-val">MOCK_FALLBACK</span>
+      </div>
+      <div class="status-pill">
+        <span class="pill-title">MISSION CLOCK:</span>
+        <span class="pill-val mono" id="mission-clock">T+00.0s</span>
+      </div>
+      <button class="btn btn-danger" id="btn-reset" title="Restart Flight Simulation">
+        <span>⟲ Reset Flight</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Grid Dashboard -->
+  <main class="dashboard-grid">
+    <!-- Left Column: Primary 2D Ballistic Trajectory Viewport -->
+    <section class="panel trajectory-panel">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <span class="panel-tag">PRIMARY SENSOR DISPLAY</span>
+          <h2 class="panel-title">Ballistic 2D Trajectory Viewport</h2>
+        </div>
+        <div class="phase-badge" id="phase-badge">BALLISTIC ASCENT</div>
+      </div>
+
+      <div class="canvas-container" id="canvas-wrapper">
+        <canvas id="trajectoryCanvas"></canvas>
+        <!-- Overlay Live Telemetry Readout -->
+        <div class="hud-overlay top-left">
+          <div class="hud-stat">
+            <span class="hud-label">DOWNRANGE (X)</span>
+            <span class="hud-val cyan" id="hud-x">0.0 m</span>
+          </div>
+          <div class="hud-stat">
+            <span class="hud-label">ALTITUDE (Y)</span>
+            <span class="hud-val cyan" id="hud-y">0.0 m</span>
+          </div>
+          <div class="hud-stat">
+            <span class="hud-label">MAX APOGEE</span>
+            <span class="hud-val amber" id="hud-apogee">950.0 m</span>
+          </div>
+        </div>
+
+        <div class="hud-overlay top-right">
+          <div class="hud-stat text-right">
+            <span class="hud-label">TARGET RANGE</span>
+            <span class="hud-val" id="hud-target">3,000 m</span>
+          </div>
+          <div class="hud-stat text-right">
+            <span class="hud-label">PREDICTED CEP</span>
+            <span class="hud-val green" id="hud-cep">&lt; 0.82 m</span>
+          </div>
+          <div class="hud-stat text-right">
+            <span class="hud-label">FUZE STATUS</span>
+            <span class="hud-val amber" id="hud-fuze">PROXIMITY NIR</span>
+          </div>
+        </div>
+
+        <!-- Legend Overlay -->
+        <div class="hud-legend">
+          <span class="legend-item"><span class="legend-box dashed"></span> Planned Arc</span>
+          <span class="legend-item"><span class="legend-box blue-solid"></span> Shell Trajectory</span>
+          <span class="legend-item"><span class="legend-box green-dot"></span> Ogive E-Stack</span>
+          <span class="legend-item"><span class="legend-box amber-tri"></span> Apogee Peak</span>
+          <span class="legend-item"><span class="legend-box red-cross"></span> Target Impact</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Column: Sensor Stack & HUD Instruments -->
+    <section class="panel gauges-panel">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <span class="panel-tag">SWAP-C E-STACK TELEMETRY</span>
+          <h2 class="panel-title">Sensor Array Gauges</h2>
+        </div>
+      </div>
+
+      <div class="gauges-grid">
+        <!-- 1. IMU Ogive Spin (Decoupled Bearings) -->
+        <div class="card metric-card">
+          <div class="card-header">
+            <span class="card-icon">🌀</span>
+            <span class="card-title">IMU (ICM-20948) SPIN</span>
+          </div>
+          <div class="card-body">
+            <div class="big-metric" id="metric-spin">200.0 <span class="unit">RPM</span></div>
+            <div class="sub-label">Decoupled from 15,000 RPM Body</div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill spin-fill" id="spin-bar" style="width: 20%;"></div>
+            </div>
+            <div class="stat-row">
+              <span>Roll Rate: <strong id="metric-roll">20.94 rad/s</strong></span>
+              <span>Pitch/Yaw: <strong id="metric-pitch">0.12 rad/s</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Barometer BMP388 Pressure & Temp -->
+        <div class="card metric-card">
+          <div class="card-header">
+            <span class="card-icon">🌡️</span>
+            <span class="card-title">BAROMETER (BMP388)</span>
+          </div>
+          <div class="card-body">
+            <div class="big-metric" id="metric-press">1013.2 <span class="unit">hPa</span></div>
+            <div class="sub-label">Ambient Temperature: <span id="metric-temp" class="text-amber">28.0 °C</span></div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill press-fill" id="press-bar" style="width: 100%;"></div>
+            </div>
+            <div class="stat-row">
+              <span>Ground Ref: 1013.2 hPa</span>
+              <span>Apogee Min: ~890 hPa</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Accelerometer (3-Axis G-Load) -->
+        <div class="card metric-card">
+          <div class="card-header">
+            <span class="card-icon">⚡</span>
+            <span class="card-title">ACCELERATION (G-LOAD)</span>
+          </div>
+          <div class="card-body">
+            <div class="vector-readouts">
+              <div class="vec-item">
+                <span class="vec-axis">Ax (Drag)</span>
+                <span class="vec-val" id="metric-ax">-1.80 m/s²</span>
+              </div>
+              <div class="vec-item">
+                <span class="vec-axis">Ay (Flaps)</span>
+                <span class="vec-val" id="metric-ay">+0.25 m/s²</span>
+              </div>
+              <div class="vec-item">
+                <span class="vec-axis">Az (Lift/G)</span>
+                <span class="vec-val cyan" id="metric-az">9.81 m/s²</span>
+              </div>
+            </div>
+            <div class="sub-label mt-2">Aerodynamic Steering Stabilized</div>
+          </div>
+        </div>
+
+        <!-- 4. NIR Multi-Spectral Proximity Fuze -->
+        <div class="card metric-card">
+          <div class="card-header">
+            <span class="card-icon">📡</span>
+            <span class="card-title">MULTI-SPECTRAL IR (AS72651)</span>
+          </div>
+          <div class="card-body">
+            <div class="big-metric" id="metric-dist">500.0 <span class="unit">cm</span></div>
+            <div class="sub-label">Proximity Fuze Range to Target</div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar-fill dist-fill" id="dist-bar" style="width: 100%;"></div>
+            </div>
+            <div class="stat-row">
+              <span>Decoy Bypass: ACTIVE</span>
+              <span>Detonation Mode: PROXIMITY</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Full-Width Panel: ML Outlier Detection & Anti-Jamming Filter -->
+    <section class="panel ml-panel">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <span class="panel-tag">ANTI-JAMMING DEFENSE</span>
+          <h2 class="panel-title">Dual-Stage Outlier & Jamming Filter Monitor</h2>
+        </div>
+        <div class="ml-status-badges">
+          <span class="badge badge-layer">Layer 1: Robust Z-Score (MAD N=50)</span>
+          <span class="badge badge-layer">Layer 2: IsolationForest (ML)</span>
+          <span class="badge badge-active" id="outlier-alert-badge">GUARD ACTIVE &bull; NOMINAL</span>
+        </div>
+      </div>
+
+      <div class="ml-monitor-content">
+        <div class="gps-compare-card">
+          <div class="compare-col">
+            <span class="col-title">RAW GNSS INPUT (NEO-M8N)</span>
+            <div class="coord-val" id="raw-coords">28.613900°, 77.209000°</div>
+            <div class="coord-sub">Alt: <span id="raw-alt">150.0 m</span></div>
+          </div>
+          <div class="compare-arrow">➔</div>
+          <div class="compare-col">
+            <span class="col-title text-green">CLEANED BEST-FIT OUTPUT (EKF/ML)</span>
+            <div class="coord-val text-green" id="clean-coords">28.613900°, 77.209000°</div>
+            <div class="coord-sub">Alt: <span id="clean-alt" class="text-green">150.0 m</span></div>
+          </div>
+        </div>
+
+        <div class="anomaly-log-box" id="anomaly-log">
+          <div class="log-entry log-nominal">
+            <span class="log-time">[00:00:00]</span>
+            <span class="log-msg">ML Outlier Guard Initialized. Telemetry stream verified nominal.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Mission Accomplished Modal Overlay -->
+  <div class="modal-overlay" id="mission-modal" style="display: none;">
+    <div class="modal-card">
+      <button class="modal-close" id="btn-modal-close" title="Dismiss modal">&times;</button>
+      <div class="modal-reticle-header">
+        <span class="modal-reticle-icon">⌖</span>
+      </div>
+      <div class="modal-tag">[MISSION REPORT // TARGET STRIKE]</div>
+      <h2 class="modal-title">DIRECT IMPACT CONFIRMED</h2>
+      <p class="modal-subtitle">155mm VECTOR Shell Intercepted Objective Coordinates (3,000m Downrange)</p>
+      
+      <div class="modal-stats-grid">
+        <div class="mstat">
+          <span class="mstat-lbl">Downrange Distance</span>
+          <span class="mstat-val">3,000.0 m</span>
+        </div>
+        <div class="mstat">
+          <span class="mstat-lbl">Peak Apogee</span>
+          <span class="mstat-val">950.0 m</span>
+        </div>
+        <div class="mstat">
+          <span class="mstat-lbl">Circular Error (CEP)</span>
+          <span class="mstat-val green">0.82 m (&lt; 20m SPEC)</span>
+        </div>
+        <div class="mstat">
+          <span class="mstat-lbl">Fuze Status</span>
+          <span class="mstat-val amber">Proximity NIR Triggered</span>
+        </div>
+      </div>
+
+      <div class="modal-countdown" id="modal-countdown">
+        Next test run cycling in <span id="countdown-val">4.0</span>s
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="btn-replay">Replay Flight Now</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

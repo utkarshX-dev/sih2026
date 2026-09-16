@@ -1,0 +1,781 @@
+/* =====================================================================
+   VECTOR 155mm Shell Web Ground Station - CSS Design System
+   Theme: Defense Tactical Ground Control Station (MIL-STD Avionics & HUD)
+   Non-AI Military Grade Interface (Zero Purple, Zero Magenta, Clean Contrast)
+   ===================================================================== */
+
+:root {
+  /* Tactical Military Dark Chassis */
+  --bg-primary: #0a0d14;
+  --bg-secondary: #0f141e;
+  --bg-card: #131a26;
+  --bg-card-hover: #182232;
+  --bg-inset: #090c12;
+
+  /* Rugged Mechanical Borders */
+  --border-subtle: #1e293b;
+  --border-active: #2b3b52;
+  --border-highlight: #38bdf8;
+
+  /* Crisp Typography Hierarchy */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  /* Tactical Military Accents */
+  --tac-blue: #38bdf8;
+  --tac-amber: #f59e0b;
+  --tac-green: #22c55e;
+  --tac-red: #ef4444;
+  --tac-olive: #65a30d;
+
+  /* Military Font Stack */
+  --font-main: 'Outfit', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Sharp Tactical Bevel Radii */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-pill: 3px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-primary);
+  /* Tactical Grid Weave Background */
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(180deg, #090c12 0%, #0d121b 100%);
+  background-size: 32px 32px, 32px 32px, 100% 100%;
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* =====================================================================
+   HEADER & STATUS BAR (MIL-STD TACTICAL TOP BAR)
+   ===================================================================== */
+.header {
+  height: 66px;
+  background: var(--bg-secondary);
+  border-bottom: 2px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  background: #182232;
+  border: 1.5px solid #2b3b52;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-reticle {
+  font-size: 24px;
+  color: var(--tac-amber);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.brand-sys-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--tac-amber);
+  margin-bottom: 1px;
+}
+
+.brand-title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.brand-subtitle {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  display: block;
+}
+
+.header-status-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-pill {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+}
+
+.pill-title {
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.8px;
+}
+
+.pill-val {
+  color: var(--tac-blue);
+  font-weight: 700;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--tac-blue);
+}
+
+.status-dot.pulse {
+  background-color: var(--tac-amber);
+  animation: radarPulse 1.6s infinite;
+}
+
+.status-dot.connected {
+  background-color: var(--tac-green);
+}
+
+.status-dot.disconnected {
+  background-color: var(--tac-red);
+}
+
+@keyframes radarPulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+.btn {
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 7px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+}
+
+.btn-danger {
+  background: #231215;
+  color: #f87171;
+  border: 1px solid #7f1d1d;
+}
+
+.btn-danger:hover {
+  background: #3b1419;
+  border-color: #b91c1c;
+}
+
+.btn-primary {
+  background: var(--tac-amber);
+  color: #0a0d14;
+  border: 1px solid #d97706;
+}
+
+.btn-primary:hover {
+  background: #fbbf24;
+  transform: translateY(-1px);
+}
+
+/* =====================================================================
+   MAIN DASHBOARD GRID (TACTICAL CONSOLE PANELS)
+   ===================================================================== */
+.dashboard-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.65fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 16px;
+  padding: 16px 24px;
+}
+
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.panel-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--tac-amber);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.panel-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.phase-badge {
+  background: #182232;
+  border: 1px solid #2b3b52;
+  color: var(--tac-blue);
+  padding: 3px 10px;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+/* =====================================================================
+   2D TRAJECTORY VIEWPORT
+   ===================================================================== */
+.canvas-container {
+  position: relative;
+  flex: 1;
+  min-height: 440px;
+  background: var(--bg-inset);
+  border: 1px solid #1a2332;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+@keyframes screenShake {
+  0% { transform: translate(0, 0); }
+  15% { transform: translate(-4px, 3px); }
+  30% { transform: translate(4px, -3px); }
+  45% { transform: translate(-3px, -2px); }
+  60% { transform: translate(3px, 2px); }
+  75% { transform: translate(-1px, 1px); }
+  100% { transform: translate(0, 0); }
+}
+
+.canvas-container.detonating {
+  animation: screenShake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  box-shadow: 0 0 50px rgba(255, 68, 0, 0.5), inset 0 0 35px rgba(255, 120, 0, 0.25);
+  border-color: rgba(255, 100, 0, 0.75);
+}
+
+#trajectoryCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hud-overlay {
+  position: absolute;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hud-overlay.top-left {
+  top: 14px;
+  left: 16px;
+}
+
+.hud-overlay.top-right {
+  top: 14px;
+  right: 16px;
+}
+
+.hud-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.hud-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+.hud-val {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.hud-val.cyan { color: var(--tac-blue); }
+.hud-val.amber { color: var(--tac-amber); }
+.hud-val.green { color: var(--tac-green); }
+
+.hud-legend {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  display: flex;
+  gap: 14px;
+  background: rgba(10, 13, 20, 0.9);
+  padding: 5px 12px;
+  border-radius: var(--radius-xs);
+  border: 1px solid #1e293b;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-box {
+  width: 12px;
+  height: 4px;
+  border-radius: 1px;
+}
+
+.legend-box.dashed { border-top: 2px dashed #94a3b8; }
+.legend-box.blue-solid { background: var(--tac-blue); }
+.legend-box.green-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--tac-green); }
+.legend-box.amber-tri { color: var(--tac-amber); font-weight: bold; }
+.legend-box.red-cross { color: var(--tac-red); font-weight: bold; }
+
+/* =====================================================================
+   GAUGES & SENSOR INSTRUMENT CARDS
+   ===================================================================== */
+.gauges-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.card {
+  background: #101622;
+  border: 1px solid #1c2636;
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.card-icon {
+  font-size: 14px;
+}
+
+.card-title {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.big-metric {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.big-metric .unit {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.sub-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  font-family: var(--font-mono);
+}
+
+.progress-bar-wrap {
+  width: 100%;
+  height: 5px;
+  background: #182232;
+  border-radius: 2px;
+  margin: 8px 0 6px 0;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.15s ease;
+}
+
+/* Tactical Solid Monochromatic Fills (NO AI PURPLE / PINK GRADIENTS) */
+.spin-fill { background: #0284c7; }
+.press-fill { background: #d97706; }
+.dist-fill { background: #16a34a; }
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+
+.stat-row strong {
+  color: #ffffff;
+}
+
+.vector-readouts {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.vec-item {
+  background: #151d2c;
+  border: 1px solid #1f2a3c;
+  border-radius: var(--radius-xs);
+  padding: 5px 3px;
+  text-align: center;
+}
+
+.vec-axis {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--text-muted);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.vec-val {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* =====================================================================
+   BOTTOM PANEL: ML OUTLIER & ANTI-JAMMING MONITOR
+   ===================================================================== */
+.ml-panel {
+  grid-column: 1 / -1;
+}
+
+.ml-status-badges {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.badge-layer {
+  background: #151d2c;
+  color: var(--text-secondary);
+  border: 1px solid #233044;
+}
+
+.badge-active {
+  background: #11261d;
+  color: #4ade80;
+  border: 1px solid #166534;
+}
+
+.badge-alert {
+  background: #2a1215;
+  color: #f87171;
+  border: 1px solid #991b1b;
+  animation: radarPulse 0.8s infinite;
+}
+
+.ml-monitor-content {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.gps-compare-card {
+  background: #101622;
+  border: 1px solid #1c2636;
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.compare-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.col-title {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+.coord-val {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.coord-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.compare-arrow {
+  font-size: 16px;
+  color: var(--tac-amber);
+}
+
+.anomaly-log-box {
+  background: var(--bg-inset);
+  border: 1px solid #1a2332;
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  height: 90px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.log-entry {
+  display: flex;
+  gap: 8px;
+}
+
+.log-time { color: var(--text-muted); }
+.log-nominal { color: #86efac; }
+.log-alert { color: #fca5a5; font-weight: 600; }
+
+/* =====================================================================
+   MISSION REPORT MODAL (MILITARY STRIKE ASSESSMENT DIALOG)
+   ===================================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 8, 14, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-card {
+  position: relative;
+  background: #111722;
+  border: 1.5px solid var(--tac-amber);
+  border-radius: var(--radius-md);
+  padding: 28px 36px;
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  color: #ffffff;
+}
+
+.modal-reticle-header {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: #182232;
+  border: 1px solid #2b3b52;
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+}
+
+.modal-reticle-icon {
+  font-size: 26px;
+  color: var(--tac-amber);
+  line-height: 1;
+}
+
+.modal-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--tac-amber);
+  margin-bottom: 4px;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.modal-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.modal-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.mstat {
+  background: #0d121b;
+  border: 1px solid #1c2636;
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mstat-lbl {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.mstat-val {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 2px;
+}
+
+.mstat-val.green { color: var(--tac-green); }
+.mstat-val.amber { color: var(--tac-amber); }
+
+.modal-countdown {
+  font-size: 11px;
+  color: var(--tac-amber);
+  margin-bottom: 16px;
+  font-family: var(--font-mono);
+  background: #1c180e;
+  border: 1px solid #78350f;
+  padding: 6px 12px;
+  border-radius: var(--radius-xs);
+  display: inline-block;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+}
+
+/* Helpers */
+.mono { font-family: var(--font-mono); }
+.text-amber { color: var(--tac-amber); }
+.text-green { color: var(--tac-green); }
+.text-right { text-align: right; }
+.mt-2 { margin-top: 8px; }
+
+@media (max-width: 960px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}

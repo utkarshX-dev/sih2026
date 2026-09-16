@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VECTOR 155mm — Engineering Flowcharts & Architecture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg: #0a0d14;
+      --card-bg: #111722;
+      --border: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --amber: #f59e0b;
+      --green: #22c55e;
+      --blue: #38bdf8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      padding: 24px;
+      min-height: 100vh;
+    }
+
+    header {
+      max-width: 1280px;
+      margin: 0 auto 30px auto;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sys-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--amber);
+      letter-spacing: 1.5px;
+    }
+
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: #182232;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active, .tab-btn:hover {
+      background: var(--amber);
+      color: #0a0d14;
+      border-color: #d97706;
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .chart-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 24px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .chart-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .chart-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .mermaid-wrapper {
+      background: #07090f;
+      border: 1px solid #16202e;
+      border-radius: 4px;
+      padding: 24px;
+      overflow-x: auto;
+      text-align: center;
+    }
+
+    .mermaid {
+      display: inline-block;
+    }
+
+    .print-note {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--amber);
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 8px 14px;
+      border-radius: 4px;
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand-group">
+      <span class="sys-badge">SIH 2026 PS-98 &bull; TEAM TENACITY (R15-230)</span>
+      <h1>VECTOR 155mm Engineering Flowcharts</h1>
+      <span class="subtitle">System Operational Architecture, ML Anti-Jamming Filter & Smart Fuze Logic</span>
+    </div>
+
+    <div class="nav-tabs">
+      <button class="tab-btn" onclick="scrollToSection('sec-master')">Master Flight Flow</button>
+      <button class="tab-btn" onclick="scrollToSection('sec-ml')">ML Anti-Jamming</button>
+      <button class="tab-btn" onclick="scrollToSection('sec-power')">Power & Decoupling</button>
+      <button class="tab-btn" onclick="scrollToSection('sec-fuze')">Smart Fuze Logic</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="print-note">
+      💡 <b>Presentation Tip</b>: Use your browser's screenshot or right-click to copy these diagrams directly into <b>Slide 3 (Technical Approach)</b> of your pitch deck!
+    </div>
+
+    <!-- Chart 1: Master Flight Architecture -->
+    <section class="chart-card" id="sec-master">
+      <div class="chart-header">
+        <h2 class="chart-title">1. Master End-to-End Flight & Guidance Architecture</h2>
+      </div>
+      <p class="chart-desc">Complete closed-loop flight cycle from 10,000G launch acceleration, bearing decoupling, 10Hz sensor ingestion, ML anti-jamming filter, EKF guidance, and terminal smart airburst.</p>
+      <div class="mermaid-wrapper">
+        <pre class="mermaid">
+flowchart TD
+    classDef launch fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#fff;
+    classDef power fill:#132e22,stroke:#22c55e,stroke-width:2px,color:#fff;
+    classDef sensors fill:#131f37,stroke:#38bdf8,stroke-width:2px,color:#fff;
+    classDef ml fill:#2e1b13,stroke:#f59e0b,stroke-width:2px,color:#fff;
+    classDef gnc fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#fff;
+    classDef terminal fill:#371317,stroke:#ef4444,stroke-width:2px,color:#fff;
+
+    A["155mm Artillery Launch<br>(10,000G - 20,000G Set-back)"]:::launch --> B["Shock Absorption via Epoxy Potting & Belleville Washers"]:::launch
+    B --> C["Barrel Rifling: Shell Body at 15,000 RPM"]:::launch
+    C --> D["Ball Bearing Decoupling: Ogive Cone < 200 RPM"]:::launch
+
+    D --> E["14,800 RPM Relative Differential (Body vs Ogive)"]:::power
+    E --> F["N52 Magnets + Stationary Coils = Induction Power"]:::power
+    F --> G["Regulated 3.3V Logic & 5.0V Servo Rails"]:::power
+
+    G --> H["MCU Initialization (STM32 / ESP32)"]:::sensors
+    H --> I["10Hz Sensor Intake: IMU, Barometer, GNSS, NIR"]:::sensors
+
+    I --> J["Dual-Stage ML Anti-Jamming Filter"]:::ml
+    J --> K{"Kinematic MAD / Isolation Forest Anomaly?"}:::ml
+    K -- "EW Spoof / Spike" --> L["Kinematic Extrapolation Imputation"]:::ml
+    K -- "Nominal Stream" --> M["Validated Telemetry Stream"]:::ml
+    L --> M
+
+    M --> N["Extended Kalman Filter (EKF) State Fusion"]:::gnc
+    N --> O["Trajectory Error Computer vs Ballistic Arc"]:::gnc
+    O --> P["PID Controller Actuates 4x Canard Flaps"]:::gnc
+
+    P --> Q{"Terminal Range < 5.0m?"}:::terminal
+    Q -- "No" --> N
+    Q -- "Yes" --> R["AS72651 NIR Multi-Spectral Scan"]:::terminal
+    R --> S{"Genuine Armor vs Decoy?"}:::terminal
+    S -- "Decoy" --> T["Inhibit Early Burst & Dive"]:::terminal
+    T --> Q
+    S -- "Armor Confirmed" --> U["SMART PROXIMITY AIRBURST DETONATION<br>(CEP < 0.82m)"]:::terminal
+        </pre>
+      </div>
+    </section>
+
+    <!-- Chart 2: ML Anti-Jamming Pipeline -->
+    <section class="chart-card" id="sec-ml">
+      <div class="chart-header">
+        <h2 class="chart-title">2. Dual-Stage Outlier & Anti-Jamming Filter Pipeline</h2>
+      </div>
+      <p class="chart-desc">Detailed mathematical decision flow implemented in <code>outlier_detector.py</code>, combining rolling kinematic Modified Z-Scores with multivariate Scikit-Learn Isolation Forests.</p>
+      <div class="mermaid-wrapper">
+        <pre class="mermaid">
+flowchart TD
+    classDef input fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#fff;
+    classDef decision fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#fff;
+    classDef process fill:#14231b,stroke:#22c55e,stroke-width:2px,color:#fff;
+    classDef alert fill:#311315,stroke:#ef4444,stroke-width:2px,color:#fff;
+
+    IN["Raw Telemetry Stream (10 Hz)"]:::input --> B["Compute Step-to-Step Kinematic Deltas"]:::process
+    B --> C{"Check Physical Rate Bounds (Mach 2 limits)"}:::decision
+    C -- "Exceeded (EW GPS Jamming)" --> D["Flag: Physical Rate Outlier"]:::alert
+    C -- "Within Bounds" --> E["Rolling MAD Window (N=50)"]:::process
+    E --> F["Modified Z-Score Calculation"]:::process
+    F --> G{"Is |Z| > 3.5?"}:::decision
+    G -- "Yes" --> D
+    G -- "No" --> H["Accept Sensor Value"]:::process
+    D --> I["Velocity Extrapolation Imputation"]:::process
+
+    H & I --> J{"Sample Buffer >= 30 & Step % 20 == 0?"}:::decision
+    J -- "Yes" --> K["Run Multivariate Isolation Forest ML"]:::process
+    J -- "No" --> L["Forward Validated Packet"]:::process
+    K --> M{"Isolation Score == -1?"}:::decision
+    M -- "Cross-Sensor Desync" --> N["Flag: Multivariate Outlier"]:::alert
+    M -- "Nominal" --> L
+    N --> L
+    L --> OUT["Pass to Web GCS & EKF Flight Controller"]:::input
+        </pre>
+      </div>
+    </section>
+
+    <!-- Chart 3: Power & Decoupling Flow -->
+    <section class="chart-card" id="sec-power">
+      <div class="chart-header">
+        <h2 class="chart-title">3. Battery-Less Induction Power & Bearing Decoupling Mechanism</h2>
+      </div>
+      <p class="chart-desc">Physics breakdown of converting the artillery shell's 15,000 RPM rifling spin into usable electrical current while decoupling aerodynamic control surfaces.</p>
+      <div class="mermaid-wrapper">
+        <pre class="mermaid">
+flowchart LR
+    classDef mech fill:#1e293b,stroke:#94a3b8,stroke-width:2px,color:#fff;
+    classDef spin fill:#172554,stroke:#38bdf8,stroke-width:2px,color:#fff;
+    classDef mag fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#fff;
+    classDef elec fill:#14532d,stroke:#22c55e,stroke-width:2px,color:#fff;
+
+    A["Gun Barrel Rifling"]:::mech --> B["Shell Body Spins at 15,000 RPM"]:::spin
+    B --> C["Precision Ball Bearings + Belleville Washers"]:::mech
+    C --> D["Decoupled Ogive Spins at < 200 RPM"]:::spin
+
+    B --> E["Neodymium N52 Magnets on Collar"]:::mag
+    D --> F["Stationary Induction Coils in Ogive"]:::mag
+
+    E & F --> G["Relative Differential: Δ 14,800 RPM"]:::mag
+    G --> H["Faraday Electromagnetic Induction"]:::elec
+    H --> I["Schottky Rectifier & Ultracapacitor Bank"]:::elec
+    I --> J["Regulated 3.3V Logic & 5.0V Servo Rails"]:::elec
+    J --> K["Zero Chemical Batteries: Infinite Shelf Life"]:::elec
+        </pre>
+      </div>
+    </section>
+
+    <!-- Chart 4: Smart Fuze Logic -->
+    <section class="chart-card" id="sec-fuze">
+      <div class="chart-header">
+        <h2 class="chart-title">4. Multi-Spectral NIR Smart Proximity Fuze Logic</h2>
+      </div>
+      <p class="chart-desc">Optical multi-band target discrimination algorithm running on the AS72651 Near-Infrared sensor to prevent premature detonation on smoke, foil, or decoys.</p>
+      <div class="mermaid-wrapper">
+        <pre class="mermaid">
+flowchart TD
+    classDef check fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#fff;
+    classDef action fill:#15803d,stroke:#22c55e,stroke-width:2px,color:#fff;
+    classDef reject fill:#7f1d1d,stroke:#ef4444,stroke-width:2px,color:#fff;
+
+    A["Descent Phase: Distance to Target < 500 cm"]:::check --> B["Activate AS72651 Multi-Spectral NIR Array"]:::check
+    B --> C["Sample 6 Optical Wavebands (610nm - 860nm)"]:::check
+    C --> D["Compute Reflectance Ratio R(λ)"]:::check
+    D --> E{"Reflectance Matches Decoys (Mylar, Smoke, Inflatables)?"}:::check
+    E -- "Yes (Decoy Detected)" --> F["Inhibit Detonation & Log Event"]:::reject
+    F --> G["Maintain Glide Path & Continue Dive"]:::action
+    G --> A
+    E -- "No Decoy Match" --> H{"Reflectance Matches Armored Military Vehicle?"}:::check
+    H -- "Verified" --> I{"Proximity Distance <= 1.5 - 2.5m Burst Height?"}:::check
+    H -- "Uncertain" --> G
+    I -- "Yes (Optimal Burst Point)" --> J["DETONATE SMART ELECTRONIC FUZE<br>(Top Armor Airburst Strike)"]:::action
+    I -- "Approaching" --> K["Arm High-Speed Firing Circuit"]:::check
+    K --> I
+        </pre>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#07090f',
+        primaryColor: '#182232',
+        primaryTextColor: '#f8fafc',
+        primaryBorderColor: '#38bdf8',
+        lineColor: '#94a3b8',
+        secondaryColor: '#131a26',
+        tertiaryColor: '#111722'
+      }
+    });
+
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
